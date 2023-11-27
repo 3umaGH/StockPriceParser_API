@@ -35,7 +35,11 @@ module.exports.fetchTickerPrices = async (
         const price = await this.getTickerPrice(ticker);
 
         tickerPricesMap.set(ticker, price);
-        console.log(tickerPricesMap.size);
+
+        if(price.price === -1)
+        console.log(`Price not found on page for: ${price.ticker}`)
+
+        //console.log(tickerPricesMap.size);
       } catch (error) {
         console.error(`Error fetching price for ${ticker}: ${error.message}`);
       }
