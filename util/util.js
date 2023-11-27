@@ -32,14 +32,17 @@ module.exports.fetchTickerPrices = async (
   tickersArr.forEach(async (ticker) => {
     setTimeout(async () => {
       try {
-        const price = await this.getTickerPrice(ticker);
+        const priceObj = await this.getTickerPrice(ticker);
+        const oldPrice = (tickerPricesMap.get(ticker) ?? {}).price || -1;
 
-        tickerPricesMap.set(ticker, price);
+        if (priceObj.price === -1)
+          console.log(`Price not found on page for: ${priceObj.ticker}`);
 
-        if(price.price === -1)
-        console.log(`Price not found on page for: ${price.ticker}`)
+        tickerPricesMap.set(ticker, priceObj);
 
-        //console.log(tickerPricesMap.size);
+        console.log(
+          `Updated ${ticker} price OLD: ${oldPrice} ${priceObj.currency} NEW: ${priceObj.price} ${priceObj.currency}`
+        );
       } catch (error) {
         console.error(`Error fetching price for ${ticker}: ${error.message}`);
       }
