@@ -33,9 +33,9 @@ module.exports.fetchTickerPrices = async (
     setTimeout(async () => {
       try {
         const price = await this.getTickerPrice(ticker);
-        
+
         tickerPricesMap.set(ticker, price);
-        console.log(price);
+        console.log(tickerPricesMap.size);
       } catch (error) {
         console.error(`Error fetching price for ${ticker}: ${error.message}`);
       }
