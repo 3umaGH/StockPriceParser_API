@@ -1,12 +1,13 @@
 const express = require("express");
 const { getTickerPrice, fetchTickerPrices } = require("./util/util");
+const cors = require("cors");
 const app = express();
 
 const tickerArray = [
   "EURUSD",
   "VWCE:FRA:EUR",
   "LLY:NYQ",
-  "V:NYQ",
+  /*"V:NYQ",
   "UNH:NYQ",
   "TSM:NYQ",
   "NVO:NYQ",
@@ -501,7 +502,7 @@ const tickerArray = [
   "EBAY:NSQ",
   "LI:NSQ",
   "MAR:NSQ",
-  "BIIB:NSQ",
+  "BIIB:NSQ",*/
 ];
 
 const tickerPrices = new Map();
@@ -514,8 +515,16 @@ setInterval(
   1000 * 60 * 5
 );
 
+app.use(
+  cors({
+    origin: "*",
+    optionsSuccessStatus: 200,
+  })
+);
+
 app.get("/", (req, res) => {
-  res.status(200).json(Object.fromEntries(tickerPrices));
+  console.log(tickerPrices.values())
+  res.status(200).json(Array.from(tickerPrices.values()));
 });
 
 app.listen(3000, "::");
