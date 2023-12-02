@@ -527,4 +527,9 @@ app.get("/", (req, res) => {
   res.status(200).json(Array.from(tickerPrices.values()));
 });
 
+app.get("/all", (req, res) => {
+  console.log(tickerPrices.values())
+  res.status(200).json(tickerArray);
+});
+
 app.listen(3000, "::");
