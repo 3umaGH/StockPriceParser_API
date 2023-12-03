@@ -7,7 +7,7 @@ const tickerArray = [
   "EURUSD",
   "VWCE:FRA:EUR",
   "LLY:NYQ",
-  /*"V:NYQ",
+  "V:NYQ",
   "UNH:NYQ",
   "TSM:NYQ",
   "NVO:NYQ",
@@ -502,7 +502,7 @@ const tickerArray = [
   "EBAY:NSQ",
   "LI:NSQ",
   "MAR:NSQ",
-  "BIIB:NSQ",*/
+  "BIIB:NSQ",
 ];
 
 const tickerPrices = new Map();
