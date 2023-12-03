@@ -512,7 +512,7 @@ const delay = 1000 * tickerArray.length; // 1 second per ticker
 fetchTickerPrices(tickerArray, tickerPrices, 100);
 setInterval(
   () => fetchTickerPrices(tickerArray, tickerPrices, delay),
-  1000 * 60 * 5
+  1000 * 60 * 30
 );
 
 app.use(
