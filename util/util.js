@@ -1,6 +1,6 @@
-module.exports.getTickerPrice = async (ticker) => {
+module.exports.getTickerPrice = async (stock) => {
   const request = await fetch(
-    `https://markets.ft.com/data/equities/tearsheet/charts?s=${ticker}`
+    `https://markets.ft.com/data/equities/tearsheet/charts?s=${stock.symbol}`
   );
 
   const htmlContent = await request.text();
@@ -12,7 +12,8 @@ module.exports.getTickerPrice = async (ticker) => {
   const currencyMatch = htmlContent.match(currencyRegex);
 
   return {
-    ticker: ticker,
+    ticker: stock.symbol,
+    type: stock.type,
     price: priceMatch && priceMatch[1] !== undefined ? priceMatch[1] : -1,
     currency:
       currencyMatch && currencyMatch[1] !== undefined
@@ -22,31 +23,29 @@ module.exports.getTickerPrice = async (ticker) => {
   };
 };
 
-module.exports.fetchTickerPrices = async (
-  tickersArr,
-  tickerPricesMap,
-  delay
-) => {
+module.exports.fetchTickerPrices = async (stockArr, tickerPricesMap, delay) => {
   let count = 0;
 
-  tickersArr.forEach(async (ticker) => {
+  stockArr.forEach(async (stock) => {
     setTimeout(async () => {
       try {
-        const priceObj = await this.getTickerPrice(ticker);
-        const oldPrice = (tickerPricesMap.get(ticker) ?? {}).price || -1;
+        const dataObj = await this.getTickerPrice(stock);
+        const oldPrice = (tickerPricesMap.get(stock.symbol) ?? {}).price || -1;
 
-        if (priceObj.price === -1)
-          console.log(`Price not found on page for: ${priceObj.ticker}`);
+        if (dataObj.price === -1)
+          console.log(`Price couldnt be parsed for: ${stock.symbol}`);
 
-        tickerPricesMap.set(ticker, priceObj);
+        tickerPricesMap.set(stock.symbol, dataObj);
 
         console.log(
-          `Updated ${ticker} price OLD: ${oldPrice} ${priceObj.currency} NEW: ${priceObj.price} ${priceObj.currency}`
+          `Updated ${stock.symbol} price OLD: ${oldPrice} ${dataObj.currency} NEW: ${dataObj.price} ${dataObj.currency}`
         );
       } catch (error) {
-        console.error(`Error fetching price for ${ticker}: ${error.message}`);
+        console.error(
+          `Error fetching price for ${stock.symbol}: ${error.message}`
+        );
       }
-    }, (delay / tickersArr.length) * count);
+    }, (delay / stockArr.length) * count);
     count++;
   });
 };
