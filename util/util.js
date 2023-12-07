@@ -7,12 +7,16 @@ module.exports.getTickerPrice = async (stock) => {
 
   const priceRegex = /<span class="mod-ui-data-list__value">([^<]+)<\/span>/;
   const currencyRegex = /Price \(([^)]+)\)/;
+  const nameRegex =
+    /<h1 class="mod-tearsheet-overview__header__name mod-tearsheet-overview__header__name--small">(.*?)<\/h1>/;
 
   const priceMatch = htmlContent.match(priceRegex);
   const currencyMatch = htmlContent.match(currencyRegex);
+  const nameMatch = htmlContent.match(nameRegex);
 
   return {
     ticker: stock.symbol,
+    name: nameMatch[1],
     type: stock.type,
     price: priceMatch && priceMatch[1] !== undefined ? priceMatch[1] : -1,
     currency:
