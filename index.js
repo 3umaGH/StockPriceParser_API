@@ -1,43 +1,43 @@
-const express = require("express");
-const { getTickerPrice, fetchTickerPrices } = require("./util/util");
-const cors = require("cors");
-const app = express();
+const express = require('express')
+const { getTickerPrice, fetchTickerPrices } = require('./util/util')
+const cors = require('cors')
+const app = express()
 
 const stockObjArray = [
-  { symbol: "EURUSD", type: "currency" },
-  { symbol: "JPYUSD", type: "currency" },
-  { symbol: "GBPUSD", type: "currency" },
-  { symbol: "AUDUSD", type: "currency" },
-  { symbol: "CADUSD", type: "currency" },
-  { symbol: "CHFUSD", type: "currency" },
-  { symbol: "HKDUSD", type: "currency" },
-  { symbol: "NZDUSD", type: "currency" },
-  { symbol: "CNYUSD", type: "currency" },
-  { symbol: "SEKUSD", type: "currency" },
-  { symbol: "MXNUSD", type: "currency" },
-  { symbol: "NZDUSD", type: "currency" },
-  { symbol: "SGDUSD", type: "currency" },
-  { symbol: "HKDUSD", type: "currency" },
-  { symbol: "NOKUSD", type: "currency" },
-  { symbol: "KRWUSD", type: "currency" },
-  { symbol: "TRYUSD", type: "currency" },
-  { symbol: "INRUSD", type: "currency" },
-  { symbol: "RUBUSD", type: "currency" },
-  { symbol: "BRLUSD", type: "currency" },
-  { symbol: "ZARUSD", type: "currency" },
-  { symbol: "DKKUSD", type: "currency" },
-  { symbol: "THBUSD", type: "currency" },
+  { symbol: 'EURUSD', type: 'currency' },
+  { symbol: 'JPYUSD', type: 'currency' },
+  { symbol: 'GBPUSD', type: 'currency' },
+  { symbol: 'AUDUSD', type: 'currency' },
+  { symbol: 'CADUSD', type: 'currency' },
+  { symbol: 'CHFUSD', type: 'currency' },
+  { symbol: 'HKDUSD', type: 'currency' },
+  { symbol: 'NZDUSD', type: 'currency' },
+  { symbol: 'CNYUSD', type: 'currency' },
+  { symbol: 'SEKUSD', type: 'currency' },
+  { symbol: 'MXNUSD', type: 'currency' },
+  { symbol: 'NZDUSD', type: 'currency' },
+  { symbol: 'SGDUSD', type: 'currency' },
+  { symbol: 'HKDUSD', type: 'currency' },
+  { symbol: 'NOKUSD', type: 'currency' },
+  { symbol: 'KRWUSD', type: 'currency' },
+  { symbol: 'TRYUSD', type: 'currency' },
+  { symbol: 'INRUSD', type: 'currency' },
+  { symbol: 'RUBUSD', type: 'currency' },
+  { symbol: 'BRLUSD', type: 'currency' },
+  { symbol: 'ZARUSD', type: 'currency' },
+  { symbol: 'DKKUSD', type: 'currency' },
+  { symbol: 'THBUSD', type: 'currency' },
 
-  { symbol: "VWCE:FRA:EUR", type: "stock" },
-  { symbol: "SPY:PCQ:USD", type: "stock" },
-  { symbol: "IVV:PCQ:USD", type: "stock" },
-  { symbol: "VOO:PCQ:USD", type: "stock" },
-  { symbol: "VTI:PCQ:USD", type: "stock" },
-  { symbol: "QQQ:NMQ:USD", type: "stock" },
-  { symbol: "VEA:PCQ:USD", type: "stock" },
-  { symbol: "IEFA:BTQ:USD", type: "stock" },
-  { symbol: "VTV:PCQ:USD", type: "stock" },
-  { symbol: "BND:NMQ:USD", type: "stock" },
+  { symbol: 'VWCE:FRA:EUR', type: 'stock' },
+  { symbol: 'SPY:PCQ:USD', type: 'stock' },
+  { symbol: 'IVV:PCQ:USD', type: 'stock' },
+  { symbol: 'VOO:PCQ:USD', type: 'stock' },
+  { symbol: 'VTI:PCQ:USD', type: 'stock' },
+  { symbol: 'QQQ:NMQ:USD', type: 'stock' },
+  { symbol: 'VEA:PCQ:USD', type: 'stock' },
+  { symbol: 'IEFA:BTQ:USD', type: 'stock' },
+  { symbol: 'VTV:PCQ:USD', type: 'stock' },
+  /*{ symbol: "BND:NMQ:USD", type: "stock" },
   { symbol: "VUG:PCQ:USD", type: "stock" },
   { symbol: "AGG:PCQ:USD", type: "stock" },
   { symbol: "IWF:PCQ:USD", type: "stock" },
@@ -677,35 +677,32 @@ const stockObjArray = [
   { symbol: "EBAY:NSQ", type: "stock" },
   { symbol: "LI:NSQ", type: "stock" },
   { symbol: "MAR:NSQ", type: "stock" },
-  { symbol: "BIIB:NSQ", type: "stock" },
-];
+  { symbol: "BIIB:NSQ", type: "stock" },*/
+]
 
-const tickerPrices = new Map();
+const tickerPrices = new Map()
 
-const delay = 1000 * stockObjArray.length; // 1 second per ticker
+const delay = 1000 * stockObjArray.length // 1 second per ticker
 
-fetchTickerPrices(stockObjArray, tickerPrices, 100);
+fetchTickerPrices(stockObjArray, tickerPrices, 100)
 
-setInterval(
-  () => fetchTickerPrices(stockObjArray, tickerPrices, delay),
-  1000 * 60 * 30
-);
+setInterval(() => fetchTickerPrices(stockObjArray, tickerPrices, delay), 1000 * 60 * 30)
 
 app.use(
   cors({
-    origin: "*",
+    origin: '*',
     optionsSuccessStatus: 200,
   })
-);
+)
 
-app.get("/", (req, res) => {
-  console.log(tickerPrices.values());
-  res.status(200).json(Array.from(tickerPrices.values()));
-});
+app.get('/', (req, res) => {
+  console.log(tickerPrices.values())
+  res.status(200).json(Array.from(tickerPrices.values()))
+})
 
-app.get("/all", (req, res) => {
-  console.log(tickerPrices.values());
-  res.status(200).json(stockObjArray);
-});
+app.get('/all', (req, res) => {
+  console.log(tickerPrices.values())
+  res.status(200).json(stockObjArray)
+})
 
-app.listen(3000, "::");
+app.listen(3000, '::')
